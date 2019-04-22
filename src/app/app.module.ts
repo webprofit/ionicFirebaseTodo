@@ -13,10 +13,15 @@ import { AngularFireModule } from 'angularfire2';
 import { environment } from '../environments/environment';
 import { AngularFirestoreModule } from 'angularfire2/firestore';
 
+import { NotifierModule } from 'angular-notifier';
+
 @NgModule({
   declarations: [AppComponent],
   entryComponents: [],
-  imports: [BrowserModule, IonicModule.forRoot(), AppRoutingModule,
+  imports: [
+    BrowserModule,
+    NotifierModule,
+    IonicModule.forRoot(), AppRoutingModule,
     AngularFireModule.initializeApp(environment.firebase),
     AngularFirestoreModule,
   ],
@@ -27,4 +32,4 @@ import { AngularFirestoreModule } from 'angularfire2/firestore';
   ],
   bootstrap: [AppComponent]
 })
-export class AppModule {}
+export class AppModule { }
