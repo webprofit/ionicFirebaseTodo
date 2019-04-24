@@ -15,13 +15,17 @@ import { AngularFirestoreModule } from 'angularfire2/firestore';
 
 import { NotifierModule } from 'angular-notifier';
 
+import { IonicStorageModule } from '@ionic/storage';
+
 @NgModule({
   declarations: [AppComponent],
   entryComponents: [],
   imports: [
     BrowserModule,
     NotifierModule,
-    IonicModule.forRoot(), AppRoutingModule,
+    IonicModule.forRoot(),
+    IonicStorageModule.forRoot(),
+    AppRoutingModule,
     AngularFireModule.initializeApp(environment.firebase),
     AngularFirestoreModule,
   ],

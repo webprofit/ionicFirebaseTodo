@@ -1,25 +1,28 @@
 <ion-header>
   <ion-toolbar color="primary">
+    <ion-buttons slot="start">
+
+      <ion-menu-button autoHide="true"></ion-menu-button>
+    </ion-buttons>
     <ion-title>
       Ionic FireTodos
     </ion-title>
   </ion-toolbar>
 </ion-header>
- 
-<ion-content>
- 
+
+
+
+<ion-content class="bg-blue">
   <ion-list>
- 
     <ng-container *ngIf="!todos || todos.length == 0">
       <div *ngFor="let n of [0,1,2]" padding>
-        <!-- <p>No items</p> -->  
         <ion-skeleton-text></ion-skeleton-text>
         <p>
           <ion-skeleton-text class="fake-skeleton"></ion-skeleton-text>
         </p>
       </div>
     </ng-container>
- 
+
     <ion-item-sliding *ngFor="let item of todos">
       <ion-item lines="inset" button [routerLink]="['/details', item.id]">
         <ion-label>
@@ -28,21 +31,25 @@
         </ion-label>
         <ion-note slot="end" color="primary">{{ item.priority }}</ion-note>
       </ion-item>
- 
+
       <ion-item-options side="end">
         <ion-item-option (click)="remove(item)" color="secondary">
-          Check
+          Delete
           <ion-icon name="checkmark" slot="end"></ion-icon>
         </ion-item-option>
       </ion-item-options>
     </ion-item-sliding>
- 
+
   </ion-list>
- 
+
+  <ion-button (click)="changeTheme('autumn')">Autumn</ion-button>
+  <ion-button (click)="changeTheme('night')">Dark</ion-button>
+  <ion-button (click)="changeTheme('neon')">Neon</ion-button>
+
   <ion-fab vertical="bottom" horizontal="end" slot="fixed">
     <ion-fab-button routerLink="/details" routerDirection="forward">
       <ion-icon name="add"></ion-icon>
     </ion-fab-button>
   </ion-fab>
- 
+
 </ion-content>
