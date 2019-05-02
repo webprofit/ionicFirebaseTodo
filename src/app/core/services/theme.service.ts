@@ -1,7 +1,50 @@
 import { Injectable, Inject } from '@angular/core';
 import { DOCUMENT } from '@angular/common';
 import * as Color from 'color';
+// tslint:disable-next-line:prefer-const
+// let Color = require('color');
 import { Storage } from '@ionic/storage';
+
+
+const defaults = {
+  primary: '#3880ff',
+  secondary: '#0cd1e8',
+  tertiary: '#7044ff',
+  success: '#10dc60',
+  warning: '#ffce00',
+  danger: '#f04141',
+  dark: '#222428',
+  medium: '#989aa2',
+  light: '#f4f5f8'
+};
+
+const themes = {
+  autumn: {
+    primary: '#F78154',
+    secondary: '#4D9078',
+    tertiary: '#B4436C',
+    light: '#FDE8DF',
+    medium: '#FCD0A2',
+    dark: '#B89876'
+  },
+  night: {
+    primary: '#8CBA80',
+    secondary: '#FCFF6C',
+    tertiary: '#FE5F55',
+    medium: '#BCC2C7',
+    dark: '#F7F7FF',
+    light: '#495867'
+  },
+  neon: {
+    primary: '#39BFBD',
+    secondary: '#4CE0B3',
+    tertiary: '#FF5E79',
+    light: '#F4EDF2',
+    medium: '#B682A5',
+    dark: '#34162A'
+  }
+};
+
 
 @Injectable({
   providedIn: 'root'
@@ -16,14 +59,17 @@ export class ThemeService {
     });
   }
 
-  // Override all global variables with a new theme
-  setTheme(theme) {
-    const cssText = CSSTextGenerator(theme);
+  setTheme(name: any = false) {
+    let cssText = null;
+    if (name) {
+       cssText = CSSTextGenerator(themes[name]);
+    } else {
+      cssText = defaults;
+    }
     this.setGlobalCSS(cssText);
     this.storage.set('theme', cssText);
   }
 
-  // Define a single CSS variable
   setVariable(name, value) {
     this.document.documentElement.style.setProperty(name, value);
   }
@@ -37,21 +83,12 @@ export class ThemeService {
   }
 }
 
-const defaults = {
-  primary: '#3880ff',
-  secondary: '#0cd1e8',
-  tertiary: '#7044ff',
-  success: '#10dc60',
-  warning: '#ffce00',
-  danger: '#f04141',
-  dark: '#222428',
-  medium: '#989aa2',
-  light: '#f4f5f8'
-};
-
 function CSSTextGenerator(colors) {
+  console.log(colors);
+
   colors = { ...defaults, ...colors };
 
+  console.log(colors);
   const {
     primary,
     secondary,

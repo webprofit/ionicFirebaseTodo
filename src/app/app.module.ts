@@ -14,8 +14,9 @@ import { environment } from '../environments/environment';
 import { AngularFirestoreModule } from 'angularfire2/firestore';
 
 import { NotifierModule } from 'angular-notifier';
-
+import { FirebaseConfig } from '@ionic-native/firebase-config/ngx';
 import { IonicStorageModule } from '@ionic/storage';
+import { BaseConfig } from './core/base-classes/configBase';
 
 @NgModule({
   declarations: [AppComponent],
@@ -23,13 +24,15 @@ import { IonicStorageModule } from '@ionic/storage';
   imports: [
     BrowserModule,
     NotifierModule,
+    AppRoutingModule,
+    AngularFirestoreModule,
     IonicModule.forRoot(),
     IonicStorageModule.forRoot(),
-    AppRoutingModule,
     AngularFireModule.initializeApp(environment.firebase),
-    AngularFirestoreModule,
   ],
   providers: [
+    FirebaseConfig,
+    BaseConfig,
     StatusBar,
     SplashScreen,
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy }

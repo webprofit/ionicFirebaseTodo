@@ -1,7 +1,7 @@
-import { Todo, TodoService } from './../../services/todo.service';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { NavController, LoadingController } from '@ionic/angular';
+import { Todo, TodoService } from '../../core/services/todo.service';
 
 @Component({
   selector: 'app-todo-details',

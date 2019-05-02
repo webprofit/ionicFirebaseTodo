@@ -45,8 +45,6 @@ export class TodoService {
   }
 
   addTodo(todo: Todo) {
-    console.log('add', todo);
-
     return this.todosCollection.add(todo);
   }
 

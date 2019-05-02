@@ -1,66 +1,129 @@
 import { Component, OnInit, Inject } from '@angular/core';
-import { Todo, TodoService } from '../services/todo.service';
 import { NotifierService } from 'angular-notifier';
 import { Push, PushObject, PushOptions } from '@ionic-native/push/ngx';
-import { AlertController } from '@ionic/angular';
-import { ThemeService } from '../services/theme.service';
+
+import { FirebaseConfig } from '@ionic-native/firebase-config/ngx';
+import { Todo, TodoService } from '../core/services/todo.service';
+import { BaseComponent, TypeMessage } from '../core/base-classes/base-component';
+import { BaseConfig } from '../core/base-classes/configBase';
 
 
-const themes = {
-  autumn: {
-    primary: '#F78154',
-    secondary: '#4D9078',
-    tertiary: '#B4436C',
-    light: '#FDE8DF',
-    medium: '#FCD0A2',
-    dark: '#B89876'
-  },
-  night: {
-    primary: '#8CBA80',
-    secondary: '#FCFF6C',
-    tertiary: '#FE5F55',
-    medium: '#BCC2C7',
-    dark: '#F7F7FF',
-    light: '#495867'
-  },
-  neon: {
-    primary: '#39BFBD',
-    secondary: '#4CE0B3',
-    tertiary: '#FF5E79',
-    light: '#F4EDF2',
-    medium: '#B682A5',
-    dark: '#34162A'
-  }
-};
 
 @Component({
   selector: 'app-home',
   templateUrl: 'home.page.html',
   styleUrls: ['home.page.scss'],
-  providers: [Push, NotifierService],
+  providers: [Push, NotifierService, FirebaseConfig],
 })
-export class HomePage implements OnInit {
+export class HomePage extends BaseComponent implements OnInit {
 
+  showRemoteConfig: boolean;
+  // canUpdate: boolean = false;
   todos: Todo[];
 
+  programVersion: string;
+  programNewVersion: string;
+
   constructor(
-    private theme: ThemeService,
+
+    private firebaseConfig: FirebaseConfig,
     private todoService: TodoService,
     private push: Push,
-    public alertCtrl: AlertController,
-    @Inject(NotifierService) private notifier: NotifierService,
+    private config: BaseConfig,
   ) {
-
+    super(config);
   }
 
   ngOnInit() {
+
+
     this.getData();
     this.pushService();
 
+    // this.getConfig('premium_account', true);
+    this.getConfig('version');
+    // this.getRemoteConfig();
+
   }
 
-  changeTheme(name: string) {
-    this.theme.setTheme(themes[name]);
+  // getRemoteConfig() {
+  //   this.firebaseConfig.update(100)
+  //     .then(res => {
+  //       console.log('config updated!', res);
+
+  //       this.getConfig('premium_account', true);
+  //       this.getConfig('version', false);
+  //     });
+  // }
+
+  getCongigNewVersion() {
+    this.firebaseConfig.update(100)
+      .then(ress => {
+        if (ress) {
+          this.firebaseConfig.getString('version')
+            .then((res: any) => {
+              this.programNewVersion = res;
+            });
+        }
+      });
+  }
+
+  getConfig(paramKey: string) {
+    this.firebaseConfig.getString(paramKey)
+      .then((res: any) => {
+        if (paramKey === 'version') {
+          this.programVersion = res;
+          this.getCongigNewVersion();
+        }
+        if (paramKey === 'premium_account') {
+          if (res === 'true') {
+            this.changeTheme('night');
+          } else {
+            this.changeTheme('neon');
+          }
+        }
+      })
+      .catch((error: any) => console.error(error));
+  }
+
+  updateVersion() {
+    this.programVersion = this.programNewVersion;
+    this.showNotification(TypeMessage.info, `Updated`);
+  }
+
+  // isEqualVersion(): boolean {
+
+  //   this.programVersion = '1.2.2';
+  //   this.programNewVersion = '1.2.3';
+  //   // +programVersion == +programNewVersion
+  //   // tslint:disable-next-line:variable-name
+  //   let _programVersion = [];
+  //   let _programNewVersion = [];
+  //   if (this.programVersion) {
+  //     _programVersion = this.programVersion.split('.');
+  //   }
+  //   if (this.programNewVersion) {
+  //     _programNewVersion = this.programNewVersion.split('.');
+  //   }
+  //   let nowVersion = 0;
+  //   let newVersion = 0;
+  //   _programVersion.map(el => {
+  //     nowVersion += el;
+  //   });
+  //   _programNewVersion.map(el => {
+  //     newVersion += el;
+  //   });
+  //   this.showNotification(TypeMessage.info, `${nowVersion}`);
+  //   this.showNotification(TypeMessage.info, `${newVersion}`);
+  //   console.log(newVersion);
+  //   console.log(nowVersion);
+
+  //   return newVersion <= nowVersion ;
+  // }
+
+
+  remoteCnfig() {
+    this.showRemoteConfig = !this.showRemoteConfig;
   }
 
   pushService() {
@@ -69,10 +132,10 @@ export class HomePage implements OnInit {
 
         if (res.isEnabled) {
           this.initPush();
-          this.notifier.notify('error', 'We have permission to send push notifications');
+          // this.notifier.notify('error', 'We have permission to send push notifications');
         } else {
           console.log('We do not have permission to send push notifications');
-          this.notifier.notify('error', 'We do not have permission to send push notifications');
+          // this.notifier.notify('error', 'We do not have permission to send push notifications');
         }
 
       })
@@ -103,14 +166,14 @@ export class HomePage implements OnInit {
 
     pushObject.on('registration').subscribe((registration: any) => {
       console.log('Device registered', registration);
-      this.notifier.notify('error', 'Device registered');
-     
+      // this.notifier.notify('error', 'Device registered');
+
 
     });
 
     pushObject.on('error').subscribe(error => {
       console.error('Error with Push plugin', error);
-      this.notifier.notify('error', 'Error with Push plugin');
+      // this.notifier.notify('error', 'Error with Push plugin');
     });
   }
 
@@ -128,13 +191,11 @@ export class HomePage implements OnInit {
   errorHandler(err: Error | any) {
     const errMsg = `${err.code ? err.code : ''} ${err.message ? err.message : ''}`;
     console.log(err); // only for dev_________
-    this.notifier.notify('error', `${errMsg ? errMsg : 'Something went wrong'}  ${err}`);
+    // this.notifier.notify('error', `${errMsg ? errMsg : 'Something went wrong'}  ${err}`);
   }
 
   getData() {
-    console.log('get data');
     this.todoService.getTodos().subscribe(res => {
-      console.log(res);
       this.todos = res;
     });
   }

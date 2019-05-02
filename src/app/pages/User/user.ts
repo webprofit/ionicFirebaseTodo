@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
-import { NavController, LoadingController } from '@ionic/angular';
-import { AlertService } from 'src/app/services/alert.service';
+import { BaseComponent, TypeMessage } from '../../core/base-classes/base-component';
+import { BaseConfig } from '../../core/base-classes/configBase';
+
 
 
 
@@ -15,7 +15,7 @@ export class User {
   templateUrl: './user.html',
   styleUrls: ['./user.scss'],
 })
-export class UserPage implements OnInit {
+export class UserPage extends BaseComponent implements OnInit {
 
   user: User = {
     firstName: 'Robert',
@@ -24,12 +24,10 @@ export class UserPage implements OnInit {
 
 
   constructor(
-    private alertSvc: AlertService,
-    // private route: ActivatedRoute,
-    // private nav: NavController,
-    // private todoService: TodoService,
-    // private loadingController: LoadingController
-  ) { }
+    private config: BaseConfig,
+    ) {
+      super(config);
+    }
 
   ngOnInit() {
 
@@ -40,7 +38,7 @@ export class UserPage implements OnInit {
       message: `${this.user.firstName} not saved!`,
       title: 'Saving user'
     };
-    this.alertSvc.show(al);
+    this.showAlert(al);
   }
 
 

@@ -42,14 +42,64 @@
 
   </ion-list>
 
-  <ion-button (click)="changeTheme('autumn')">Autumn</ion-button>
-  <ion-button (click)="changeTheme('night')">Dark</ion-button>
-  <ion-button (click)="changeTheme('neon')">Neon</ion-button>
 
-  <ion-fab vertical="bottom" horizontal="end" slot="fixed">
+
+
+  <ion-fab vertical="top" horizontal="end" edge slot="fixed">
     <ion-fab-button routerLink="/details" routerDirection="forward">
       <ion-icon name="add"></ion-icon>
     </ion-fab-button>
   </ion-fab>
+
+  <ion-fab vertical="bottom" horizontal="end" slot="fixed">
+    <ion-fab-button>
+      <ion-icon name="settings"></ion-icon>
+    </ion-fab-button>
+
+    <ion-fab-list side="top">
+
+      <ion-fab-button class="btn-theme" (click)="changeTheme(null)">
+        Default
+      </ion-fab-button>
+
+      <ion-fab-button class="btn-theme" (click)="changeTheme('autumn')">
+        Autumn
+      </ion-fab-button>
+
+      <ion-fab-button class="btn-theme" (click)="changeTheme('night')">
+        Dark
+      </ion-fab-button>
+
+      <ion-fab-button class="btn-theme" (click)="changeTheme('neon')">
+        Neon
+      </ion-fab-button>
+
+    </ion-fab-list>
+
+  </ion-fab>
+
+
+
+
+  <ion-card *ngIf="showRemoteConfig">
+    <ion-item>
+      <ion-icon name="cloud-upload" slot="start"></ion-icon>
+      <ion-label>Your version of the application is {{programVersion || '0.0.0'}}</ion-label>
+      <ion-button [disabled]="programNewVersion == programVersion" fill="outline" slot="end" (click)="updateVersion()">Update</ion-button>
+    </ion-item>
+
+    <ion-card-content>
+      <span>Premium account :</span> No
+      <br />
+      <span>Version: </span>{{programVersion}}
+
+      <h3>New version: {{programNewVersion}}</h3>
+    </ion-card-content>
+  </ion-card>
+
+  <ion-button (click)="remoteCnfig()">{{showRemoteConfig? 'Hide': 'Show'}} setting</ion-button>
+
+
+
 
 </ion-content>
