@@ -39,11 +39,7 @@ export class HomePage extends BaseComponent implements OnInit {
 
     this.getData();
     this.pushService();
-
-    // this.getConfig('premium_account', true);
     this.getConfig('version');
-    // this.getRemoteConfig();
-
   }
 
   // getRemoteConfig() {
