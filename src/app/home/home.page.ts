@@ -157,7 +157,7 @@ export class HomePage extends BaseComponent implements OnInit {
     const pushObject: PushObject = this.push.init(options);
 
     pushObject.on('notification').subscribe((notification: any) => {
-      this.presentAlert(notification);
+      this.showAlert(notification);
     });
 
     pushObject.on('registration').subscribe((registration: any) => {
@@ -173,16 +173,16 @@ export class HomePage extends BaseComponent implements OnInit {
     });
   }
 
-  async presentAlert(notification) {
-    const alert = await this.alertCtrl.create({
-      header: 'Notification',
-      subHeader: notification.title,
-      message: notification.message,
-      buttons: ['OK']
-    });
+  // async presentAlert(notification) {
+  //   const alert = await this.alertCtrl.create({
+  //     header: 'Notification',
+  //     subHeader: notification.title,
+  //     message: notification.message,
+  //     buttons: ['OK']
+  //   });
 
-    await alert.present();
-  }
+  //   await alert.present();
+  // }
 
   errorHandler(err: Error | any) {
     const errMsg = `${err.code ? err.code : ''} ${err.message ? err.message : ''}`;

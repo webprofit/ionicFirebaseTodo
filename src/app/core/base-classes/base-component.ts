@@ -15,9 +15,10 @@ export enum TypeMessage {
 
 @Injectable()
 export class BaseComponent {
-    notifierSvc: NotifierService;
-    alertCtrl: AlertController;
-    theme: ThemeService;
+
+    private notifierSvc: NotifierService;
+    private alertCtrl: AlertController;
+    private theme: ThemeService;
 
     constructor(config: BaseConfig) {
         this.notifierSvc = config.notifier;
@@ -29,24 +30,23 @@ export class BaseComponent {
         this.theme.setTheme(name);
     }
 
-
-    errorHandler(err: Error | any) {
-        const errMsg = `${err.code ? err.code : ''} ${err.message ? err.message : ''}`;
-        this.showNotification(TypeMessage.error, `${errMsg ? errMsg : `'Something went wrong' ${err}`} `);
-    }
-
     showNotification(type: string, message: string) {
         this.notifierSvc.notify(type, message);
     }
 
-    async showAlert(AlertMessage: AlertNotification) {
+    async showAlert(alertMessage: AlertNotification) {
         const alert = await this.alertCtrl.create({
-            header: AlertMessage.header ? AlertMessage.header : 'Notification',
-            subHeader: AlertMessage.title,
-            message: AlertMessage.message,
+            header: alertMessage.header ? alertMessage.header : 'Notification',
+            subHeader: alertMessage.title,
+            message: alertMessage.message,
             buttons: ['OK']
         });
         await alert.present();
+    }
+
+    errorHandler(err: Error | any) {
+        const errMsg = `${err.code ? err.code : ''} ${err.message ? err.message : ''}`;
+        this.showNotification(TypeMessage.error, `${errMsg ? errMsg : `'Something went wrong' ${err}`} `);
     }
 
 
