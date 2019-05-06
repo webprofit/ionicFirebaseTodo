@@ -32,7 +32,6 @@
     "color": "^3.1.1",
     "cordova-android": "8.0.0",
     "cordova-ios": "5.0.0",
-    "cordova-plugin-firebase-config": "1.2.1",
     "cordova-support-android-plugin": "1.0.1",
     "cordova-support-google-services": "1.2.0",
     "core-js": "^2.5.4",
@@ -90,10 +89,6 @@
       "phonegap-plugin-push": {
         "ANDROID_SUPPORT_V13_VERSION": "27.+",
         "FCM_VERSION": "17.0.+"
-      },
-      "cordova-plugin-firebase-config": {
-        "FIREBASE_CORE_VERSION": "16.0.+",
-        "FIREBASE_CONFIG_VERSION": "16.3.+"
       }
     },
     "platforms": [
