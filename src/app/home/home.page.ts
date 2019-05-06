@@ -13,12 +13,15 @@ import { BaseConfig } from '../core/base-classes/configBase';
   selector: 'app-home',
   templateUrl: 'home.page.html',
   styleUrls: ['home.page.scss'],
-  providers: [Push, NotifierService, FirebaseConfig],
+  providers: [
+    // Push,
+    // NotifierService,
+    // FirebaseConfig
+  ],
 })
 export class HomePage extends BaseComponent implements OnInit {
 
   showRemoteConfig: boolean;
-  // canUpdate: boolean = false;
   todos: Todo[];
 
   programVersion: string;
@@ -26,9 +29,9 @@ export class HomePage extends BaseComponent implements OnInit {
 
   constructor(
 
-    private firebaseConfig: FirebaseConfig,
+    // private firebaseConfig: FirebaseConfig,
     private todoService: TodoService,
-    private push: Push,
+    // private push: Push,
     private config: BaseConfig,
   ) {
     super(config);
@@ -38,49 +41,40 @@ export class HomePage extends BaseComponent implements OnInit {
 
 
     this.getData();
-    this.pushService();
-    this.getConfig('version');
+
+    // this.pushService();
+    // this.getConfig('version');
   }
 
-  // getRemoteConfig() {
+  // getCongigNewVersion() {
   //   this.firebaseConfig.update(100)
-  //     .then(res => {
-  //       console.log('config updated!', res);
-
-  //       this.getConfig('premium_account', true);
-  //       this.getConfig('version', false);
+  //     .then(ress => {
+  //       if (ress) {
+  //         this.firebaseConfig.getString('version')
+  //           .then((res: any) => {
+  //             this.programNewVersion = res;
+  //           });
+  //       }
   //     });
   // }
 
-  getCongigNewVersion() {
-    this.firebaseConfig.update(100)
-      .then(ress => {
-        if (ress) {
-          this.firebaseConfig.getString('version')
-            .then((res: any) => {
-              this.programNewVersion = res;
-            });
-        }
-      });
-  }
-
-  getConfig(paramKey: string) {
-    this.firebaseConfig.getString(paramKey)
-      .then((res: any) => {
-        if (paramKey === 'version') {
-          this.programVersion = res;
-          this.getCongigNewVersion();
-        }
-        if (paramKey === 'premium_account') {
-          if (res === 'true') {
-            this.changeTheme('night');
-          } else {
-            this.changeTheme('neon');
-          }
-        }
-      })
-      .catch((error: any) => console.error(error));
-  }
+  // getConfig(paramKey: string) {
+  //   this.firebaseConfig.getString(paramKey)
+  //     .then((res: any) => {
+  //       if (paramKey === 'version') {
+  //         this.programVersion = res;
+  //         this.getCongigNewVersion();
+  //       }
+  //       if (paramKey === 'premium_account') {
+  //         if (res === 'true') {
+  //           this.changeTheme('night');
+  //         } else {
+  //           this.changeTheme('neon');
+  //         }
+  //       }
+  //     })
+  //     .catch((error: any) => console.error(error));
+  // }
 
   updateVersion() {
     this.programVersion = this.programNewVersion;
@@ -122,56 +116,52 @@ export class HomePage extends BaseComponent implements OnInit {
     this.showRemoteConfig = !this.showRemoteConfig;
   }
 
-  pushService() {
-    this.push.hasPermission()
-      .then((res: any) => {
+  // pushService() {
+  //   this.push.hasPermission()
+  //     .then((res: any) => {
 
-        if (res.isEnabled) {
-          this.initPush();
-          // this.notifier.notify('error', 'We have permission to send push notifications');
-        } else {
-          console.log('We do not have permission to send push notifications');
-          // this.notifier.notify('error', 'We do not have permission to send push notifications');
-        }
+  //       if (res.isEnabled) {
+  //         this.initPush();
+  //         // this.notifier.notify('error', 'We have permission to send push notifications');
+  //       } else {
+  //         console.log('We do not have permission to send push notifications');
+  //         // this.notifier.notify('error', 'We do not have permission to send push notifications');
+  //       }
 
-      })
-      .catch((err: any) => this.errorHandler(err));
-  }
+  //     })
+  //     .catch((err: any) => this.errorHandler(err));
+  // }
 
-  initPush() {
-    const options: PushOptions = {
-      android: {
-        senderID: '455698471485'
-      },
-      ios: {
-        alert: 'true',
-        badge: true,
-        sound: 'false'
-      },
-      // windows: {},
-      // browser: {
-      //   pushServiceURL: 'http://push.api.phonegap.com/v1/push'
-      // }
-    };
+  // initPush() {
+  //   const options: PushOptions = {
+  //     android: {
+  //       senderID: '455698471485'
+  //     },
+  //     ios: {
+  //       alert: 'true',
+  //       badge: true,
+  //       sound: 'false'
+  //     },
 
-    const pushObject: PushObject = this.push.init(options);
+  //   };
 
-    pushObject.on('notification').subscribe((notification: any) => {
-      this.showAlert(notification);
-    });
+  //   const pushObject: PushObject = this.push.init(options);
 
-    pushObject.on('registration').subscribe((registration: any) => {
-      console.log('Device registered', registration);
-      // this.notifier.notify('error', 'Device registered');
+  //   pushObject.on('notification').subscribe((notification: any) => {
+  //     this.showAlert(notification);
+  //   });
+
+  //   pushObject.on('registration').subscribe((registration: any) => {
+  //     console.log('Device registered', registration);
 
 
-    });
 
-    pushObject.on('error').subscribe(error => {
-      console.error('Error with Push plugin', error);
-      // this.notifier.notify('error', 'Error with Push plugin');
-    });
-  }
+  //   });
+
+  //   pushObject.on('error').subscribe(error => {
+  //     console.error('Error with Push plugin', error);
+  //   });
+  // }
 
   // async presentAlert(notification) {
   //   const alert = await this.alertCtrl.create({
@@ -184,11 +174,6 @@ export class HomePage extends BaseComponent implements OnInit {
   //   await alert.present();
   // }
 
-  errorHandler(err: Error | any) {
-    const errMsg = `${err.code ? err.code : ''} ${err.message ? err.message : ''}`;
-    console.log(err); // only for dev_________
-    // this.notifier.notify('error', `${errMsg ? errMsg : 'Something went wrong'}  ${err}`);
-  }
 
   getData() {
     this.todoService.getTodos().subscribe(res => {
@@ -196,7 +181,7 @@ export class HomePage extends BaseComponent implements OnInit {
     });
   }
 
-  remove(item) {
+  remove(item: any) {
     this.todoService.removeTodo(item.id);
   }
 }
